@@ -1,0 +1,186 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>How does a c program execute | Muuuuu's Blog</title><meta name="author" content="muuuuu"><meta name="copyright" content="muuuuu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="C 语言如何在你的 PC 上运行  该文章作为本人学习《Computer Systems : A Programmer’s Prespective》(以下简称 CSAPP) 以及《Operating System Three Easy Pieces》(以下简称 OSTEP) 的读书笔记，如有错误或者需要讨论之处，欢迎联系我。   OS:Arch Linux	GCC Version:12.2.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How does a c program execute">
+<meta property="og:url" content="http://example.com/2022/12/23/How-does-a-c-program-execute/index.html">
+<meta property="og:site_name" content="Muuuuu&#39;s Blog">
+<meta property="og:description" content="C 语言如何在你的 PC 上运行  该文章作为本人学习《Computer Systems : A Programmer’s Prespective》(以下简称 CSAPP) 以及《Operating System Three Easy Pieces》(以下简称 OSTEP) 的读书笔记，如有错误或者需要讨论之处，欢迎联系我。   OS:Arch Linux	GCC Version:12.2.0">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/banner.png">
+<meta property="article:published_time" content="2022-12-23T13:00:37.000Z">
+<meta property="article:modified_time" content="2022-12-23T14:12:48.634Z">
+<meta property="article:author" content="muuuuu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/banner.png"><link rel="shortcut icon" href="/img/icon.png"><link rel="canonical" href="http://example.com/2022/12/23/How-does-a-c-program-execute/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'How does a c program execute',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: undefined,
+  isToc: true,
+  postUpdate: '2022-12-23 22:12:48'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/icon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/banner.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Muuuuu's Blog</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">How does a c program execute</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-12-23T13:00:37.000Z" title="Created 2022-12-23 21:00:37">2022-12-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-12-23T14:12:48.634Z" title="Updated 2022-12-23 22:12:48">2022-12-23</time></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="C-语言如何在你的-PC-上运行"><a href="#C-语言如何在你的-PC-上运行" class="headerlink" title="C 语言如何在你的 PC 上运行"></a>C 语言如何在你的 PC 上运行</h1><blockquote>
+<p> 该文章作为本人学习《Computer Systems : A Programmer’s Prespective》(以下简称 CSAPP) 以及《Operating System Three Easy Pieces》(以下简称 OSTEP) 的读书笔记，如有错误或者需要讨论之处，欢迎联系我。</p>
+</blockquote>
+<blockquote>
+<p>OS:Arch Linux	GCC Version:12.2.0</p>
+</blockquote>
+<h2 id="第一个例子"><a href="#第一个例子" class="headerlink" title="第一个例子"></a>第一个例子</h2><p>C 语言从 PC 上的源文件到操作系统上执行，需要通过预处理、编译、链接等过程，最后得到一个 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%8F%AF%E5%9F%B7%E8%A1%8C%E8%88%87%E5%8F%AF%E9%8F%88%E6%8E%A5%E6%A0%BC%E5%BC%8F">ELF</a> 格式的二进制文件，对于以下一个最简单的 hello 程序，我们通过 <code>gcc hello.c</code> 命令可以获得一个 20552 字节的 a.out 文件，通过 file 命令我们可以知道这个 a.out 是一个动态链接的 ELF 格式可执行文件，运行 a.out 我们也成功获得了 hello 输出。</p>
+<img src="/2022/12/23/How-does-a-c-program-execute/complie.png" class="" title="complie">
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">sh&gt; </span><span class="language-bash">file a.out                 ─╯</span></span><br><span class="line">    a.out: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=c94de1fc1f3994f86f1c0921b41c612d9bf4221f, for GNU/Linux 4.4.0, with debug_info, not stripped</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">sh&gt; </span><span class="language-bash">./a.out</span></span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+
+<p>从上面的例子我们可以知道，其实我们的 C 程序就是在磁盘上面的一些字节序列，当我们运行时，操作系统就会执行里面的代码，从而得到想要的结果，这是最抽象的想法，接下来我们深入里面的细节。</p>
+<h2 id="编译过程"><a href="#编译过程" class="headerlink" title="编译过程"></a>编译过程</h2><p>我们跳过了预处理过程，事实上预处理过程对于以上的 hello.c 来说就是将 stdio.h 中的所有内容复制拷贝到了 hello.i，仅此而已。</p>
+<p>然后就是 Complier 执行的编译过程，我们可以使用 <code>gcc -c hello.c</code> 的命令只编译而不链接 hello.o 文件，该文件是还未链接的可重定向文件，我们可以使用 <code>objdump -d ./hello.o </code> 命令查看。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">sh&gt; </span><span class="language-bash">gcc -c ./hello.c</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">sh&gt; objdump -d ./hello.o                                                                            ─╯</span><br><span class="line"></span><br><span class="line">./hello.o：     文件格式 elf64-x86-64</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disassembly of section .text:</span><br><span class="line"></span><br><span class="line">0000000000000000 &lt;main&gt;:</span><br><span class="line">   0:   55                      push   %rbp</span><br><span class="line">   1:   48 89 e5                mov    %rsp,%rbp</span><br><span class="line">   4:   48 8d 05 00 00 00 00    lea    0x0(%rip),%rax        # b &lt;main+0xb&gt;</span><br><span class="line">   b:   48 89 c7                mov    %rax,%rdi</span><br><span class="line">   e:   b8 00 00 00 00          mov    $0x0,%eax</span><br><span class="line">  13:   e8 00 00 00 00          call   18 &lt;main+0x18&gt;</span><br><span class="line">  18:   b8 00 00 00 00          mov    $0x0,%eax</span><br><span class="line">  1d:   5d                      pop    %rbp</span><br><span class="line">  1e:   c3                      ret</span><br></pre></td></tr></table></figure>
+
+<p>可以看到我们得到了一系列的 x86-64 汇编代码（这里可能需要你有一些汇编代码的基础，不过不用担心，我们只会触及一些简单的指令），我们可以看到 main 从 0x0 的地址开始，地址 0x0 的字节为 0x55，这是一条 <code>push   %rbp</code> 指令，这些我们暂时略过，看到 0x13 地址的指令，对应了 <code>call   18 &lt;main+0x18&gt;</code> ，在 x86-64 汇编代码中 call 代表了函数跳转指令，对应于我们的源代码，可以猜到这一条汇编指令应该是对应于 <code>printf(&quot;hello&quot;);</code> ，但是在这里 call 的明明是地址 0x18 对应的指令，并没有到 printf，这就是因为我们并没有链接，并没有将 printf.o 链接进来，我们的 hello.o 并不知道 printf 这个函数的地址在哪，因此我们接下来需要链接过程。</p>
+<p>至于源代码文件是如何到汇编代码，这些是编译器做的事情，我们暂时不谈及，事实上在 CSAPP 中我们可以看到编译器在翻译源代码时候使用了许多 trick，让编译得到的汇编代码运行得最好。</p>
+<h2 id="链接过程"><a href="#链接过程" class="headerlink" title="链接过程"></a>链接过程</h2><p>链接一共分为两个部分：符号解析和重定位。首先我们先宏观的看待一下链接过程。</p>
+<p>我们准备了以下两个文件的源代码，一个是 add.c，一个是 main.c。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// add.c</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.c</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> a,<span class="type">int</span> b)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">int</span> sum;</span><br><span class="line">    sum = add(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们还是重复上面编译的过程，使用 <code>gcc -c mian.o main.c</code> <code>gcc -c add.o add.c</code> 来编译上面两个源文件，然后用过 <code>objdump</code> 命令查看。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">sh&gt; objdump -d ./main.o</span><br><span class="line">./main.o：     文件格式 elf64-x86-64</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disassembly of section .text:</span><br><span class="line"></span><br><span class="line">0000000000000000 &lt;main&gt;:</span><br><span class="line">   0:   55                      push   %rbp</span><br><span class="line">   1:   48 89 e5                mov    %rsp,%rbp</span><br><span class="line">   4:   48 83 ec 10             sub    $0x10,%rsp</span><br><span class="line">   8:   be 01 00 00 00          mov    $0x1,%esi</span><br><span class="line">   d:   bf 01 00 00 00          mov    $0x1,%edi</span><br><span class="line">  12:   e8 00 00 00 00          call   17 &lt;main+0x17&gt;</span><br><span class="line">  17:   89 45 fc                mov    %eax,-0x4(%rbp)</span><br><span class="line">  1a:   b8 00 00 00 00          mov    $0x0,%eax</span><br><span class="line">  1f:   c9                      leave</span><br><span class="line">  20:   c3                      ret</span><br></pre></td></tr></table></figure>
+
+<p>与我们前面的例子一样，在 0x12 地址的地方我们明明要调用 <code>add</code> 函数，但是由于未链接，所以我们并不知道 <code>add</code> 函数的入口在哪，所以编译器在编译的时候把 0x12 地址的字节写成了 0xe800000000，0xe8 之后本来应该是 add 的相对地址，这里设置为 0，其实也是在提醒后面的连接器，这里需要链接。</p>
+<blockquote>
+<p>x86-64 汇编语言中 call 指令的语义：首先 0xe800000000 中的 e8 代表 call 指令，后面四个字节其实是一个相对地址，例如上面的 0xe800000000 如果为 0xe8000000aa，那么我们实际跳转的地址为 call 指令后四个字节加上 call 下一条指令的地址，这里就是 0x17+0xaa，而我们没有链接的汇编代码直接把相对偏移设置为 0，就跳转到下一条指令了。</p>
+</blockquote>
+<p>然后我们开始链接，使用 <code>gcc main.o add.o -static</code>   完成链接得到 a.out 可执行文件，我们又使用 objdump 来看看 a.out 中的汇编代码，代码很长，我们挑选其中一些看。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">./a.out：     文件格式 elf64-x86-64</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disassembly of section .init:</span><br><span class="line"></span><br><span class="line">0000000000401000 &lt;_init&gt;:</span><br><span class="line">  .....     	</span><br><span class="line"></span><br><span class="line">Disassembly of section .plt:</span><br><span class="line"></span><br><span class="line">..........</span><br><span class="line"></span><br><span class="line">0000000000401605 &lt;main&gt;:</span><br><span class="line">  401605:	55                   	push   %rbp</span><br><span class="line">  401606:	48 89 e5             	mov    %rsp,%rbp</span><br><span class="line">  401609:	48 83 ec 10          	sub    $0x10,%rsp</span><br><span class="line">  40160d:	be 01 00 00 00       	mov    $0x1,%esi</span><br><span class="line">  401612:	bf 01 00 00 00       	mov    $0x1,%edi</span><br><span class="line">  401617:	e8 0a 00 00 00       	call   401626 &lt;add&gt;</span><br><span class="line">  40161c:	89 45 fc             	mov    %eax,-0x4(%rbp)</span><br><span class="line">  40161f:	b8 00 00 00 00       	mov    $0x0,%eax</span><br><span class="line">  401624:	c9                   	leave</span><br><span class="line">  401625:	c3                   	ret</span><br><span class="line"></span><br><span class="line">0000000000401626 &lt;add&gt;:</span><br><span class="line">  401626:	55                   	push   %rbp</span><br><span class="line">  401627:	48 89 e5             	mov    %rsp,%rbp</span><br><span class="line">  40162a:	89 7d fc             	mov    %edi,-0x4(%rbp)</span><br><span class="line">  40162d:	89 75 f8             	mov    %esi,-0x8(%rbp)</span><br><span class="line">  401630:	8b 55 fc             	mov    -0x4(%rbp),%edx</span><br><span class="line">  401633:	8b 45 f8             	mov    -0x8(%rbp),%eax</span><br><span class="line">  401636:	01 d0                	add    %edx,%eax</span><br><span class="line">  401638:	5d                   	pop    %rbp</span><br><span class="line">  401639:	c3                   	ret</span><br><span class="line">  40163a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)</span><br><span class="line">....</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>我们再来看 main 的汇编代码，首先我们的地址并不是刚刚只编译的从 0 开始了，而是从 0x0000000000401605 开始，其次我们的 0x401617 地址的 call 指令也有了真正的偏移量，成功跳转到了 add 函数中（根据 call 指令的语义，0x40161c+0x00000a&#x3D;0x401626，刚好就是 add 的入口地址），至此我们的 a.out 就算是真真正正一个可执行文件了。</p>
+<h3 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a>静态链接</h3><h3 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h3><h2 id="加载与运行"><a href="#加载与运行" class="headerlink" title="加载与运行"></a>加载与运行</h2><p>Coming soon</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/12/15/view2compose/"><img class="next-cover" src="/img/banner.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">From View To Jetpack Compose</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">muuuuu</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/mumu12641"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/mumu12641" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:pengbin020813@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-%E8%AF%AD%E8%A8%80%E5%A6%82%E4%BD%95%E5%9C%A8%E4%BD%A0%E7%9A%84-PC-%E4%B8%8A%E8%BF%90%E8%A1%8C"><span class="toc-number">1.</span> <span class="toc-text">C 语言如何在你的 PC 上运行</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E4%B8%AA%E4%BE%8B%E5%AD%90"><span class="toc-number">1.1.</span> <span class="toc-text">第一个例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">编译过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">链接过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5"><span class="toc-number">1.3.1.</span> <span class="toc-text">静态链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5"><span class="toc-number">1.3.2.</span> <span class="toc-text">动态链接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E4%B8%8E%E8%BF%90%E8%A1%8C"><span class="toc-number">1.4.</span> <span class="toc-text">加载与运行</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url('/img/banner.png')"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By muuuuu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div></div></body></html>
